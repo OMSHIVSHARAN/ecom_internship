@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Payment Gateway</title>
+</head>
+<body>
+  
+  <!-- Razorpay Checkout Script -->
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+  
+  <script>
+    var options = {
+      "key": "{{ razorpay_merchant_key }}", // Enter the Key ID from Razorpay Dashboard
+      "amount": "{{ razorpay_amount }}", // Amount is in paise (e.g. 50000 = ₹500.00)
+      "currency": "{{ currency }}",
+      "name": "Dj Razorpay",
+      "description": "E-commerce Transaction",
+      "image": "https://yourdomain.com/logo.png", // Optional
+      "order_id": "{{ razorpay_order_id }}", // Generated in views.py
+      "callback_url": "{{ callback_url }}",
+      "prefill": {
+        "name": "{{ user_name }}",
+        "email": "{{ user_email }}",
+        "contact": "{{ user_contact }}"
+      },
+      "notes": {
+        "address": "Corporate Office"
+      },
+      "theme": {
+        "color": "#3399cc"
+      }
+    };
+
+    var rzp1 = new Razorpay(options);
+
+    // Automatically open the Razorpay checkout popup
+    window.onload = function() {
+      rzp1.open();
+    };
+
+    // Optional: handle payment failure
+    rzp1.on('payment.failed', function (response){
+        alert("Payment Failed!\nReason: " + response.error.description);
+    });
+  </script>
+
+</body>
+</html>

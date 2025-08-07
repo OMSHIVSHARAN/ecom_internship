@@ -1,0 +1,50 @@
+{% extends "master_nav_footer.html" %}
+{% load static %}
+{% block content1 %}
+
+<div class="container my-5">
+  <div class="row mt-4">
+    <div class="col-lg-4">
+      <img
+        src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}"
+        alt="Product Image"
+        class="img-fluid"
+        style="height: 500px; width: 300px;"
+      />
+    </div>
+
+    <div class="col-lg-6 mt-5">
+      <h1>{{ product.name }}</h1>
+      <p>{{ product.discription }}</p>
+      <p><strong>Price:</strong> ₹{{ product.price }}</p>
+
+      <form method="post">
+        {% csrf_token %}
+        <label for="qty">Quantity:</label>
+        <input type="number" id="qty" name="qty" value="1" min="1" max="10" class="form-control mb-3" style="width: 100px;">
+
+        <!-- Ratings -->
+        <div class="mb-2">
+          <i class="fa-solid fa-star ratingcolor"></i>
+          <i class="fa-solid fa-star ratingcolor"></i>
+          <i class="fa-solid fa-star ratingcolor"></i>
+          <i class="fa-regular fa-star-half-stroke ratingcolor"></i>
+          <i class="fa-regular fa-star ratingcolor"></i>
+        </div>
+
+        {% if less_stock %}
+          <p class="text-danger">Only {{ product.stock }} unit available.</p>
+        {% endif %}
+
+        {% if product.stock == 0 %}
+          <p class="text-danger">Product is out of stock</p>
+        {% else %}
+          <button type="submit" name="buy" class="btn btn-outline-success mt-2">Buy Now</button>
+          <button type="submit" name="cart" class="btn btn-outline-primary mt-2">Add to Cart</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock content1 %}
